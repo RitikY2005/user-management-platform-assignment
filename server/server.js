@@ -10,9 +10,6 @@ import cors from 'cors';
 
 
 
-
-
-
 function startServer(){
     try{
         // load the database first 

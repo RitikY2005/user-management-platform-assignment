@@ -36,11 +36,6 @@ const userSchema=Schema({
         default:"ACTIVE" // INACTIVE means soft deleted 
     },
 
-    // for gettign the accesstoken 
-    refreshToken:{
-        type:String,
-        select:false,
-    },
 
     // other extra fields for logging
     createdBy:{

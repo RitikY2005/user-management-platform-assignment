@@ -28,6 +28,7 @@ const sessionSchema=Schema({
 
 sessionSchema.index({expiresAt:1},{expireAfterSeconds:0}); // automatically will delete the expired sessions awesome feature , bg ttl check by mongodb
 
+
 const SessionModel=model('Session',sessionSchema);
 
 export default SessionModel;

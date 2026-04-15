@@ -7,6 +7,7 @@ import rateLimit from 'express-rate-limit';
 import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
+import GlobalErrorMiddleware from './src/middewares/global-error-middleware.js';
 
 
 
@@ -53,6 +54,7 @@ function startServer(){
         })
 
         // global error handler 
+        app.use(GlobalErrorMiddleware);
 
     } catch(error){
         console.log(`error is starting the server ->>${error}`);

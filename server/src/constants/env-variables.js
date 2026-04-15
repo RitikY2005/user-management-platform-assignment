@@ -13,3 +13,4 @@ export const PORT=getEnvVariables("PORT");
 export const NODE_ENV=getEnvVariables("NODE_ENV");
 export const CLIENT_URL=getEnvVariables("CLIENT_URL");
 export const MONGODB_URI=getEnvVariables("MONGODB_URI");
+export const ACCESS_TOKEN_SECRET=getEnvVariables("ACCESS_TOKEN_SECRET");

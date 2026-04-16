@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
-import { ACCESS_TOKEN_SECRET } from '../constants/env-variables';
-import { ACCESS_TOKEN_EXPIRTY } from '../constants/app-constants';
+import { ACCESS_TOKEN_SECRET } from '../constants/env-variables.js';
+import { ACCESS_TOKEN_EXPIRTY } from '../constants/app-constants.js';
 import crypto from 'crypto';
 
 export const generateAccessToken = (user)=>{

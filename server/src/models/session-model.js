@@ -5,7 +5,6 @@ const sessionSchema=Schema({
         type:Schema.Types.ObjectId,
         required:true,
         ref:"User",
-        index:true,
     },
     refreshToken:{
         type:String,
@@ -16,7 +15,6 @@ const sessionSchema=Schema({
     expiresAt:{
         type:Date,
         required:true,
-        index:true
     },
     isRevoked:{
         type:Boolean,
@@ -27,7 +25,7 @@ const sessionSchema=Schema({
 },{timestamps:true});
 
 sessionSchema.index({expiresAt:1},{expireAfterSeconds:0}); // automatically will delete the expired sessions awesome feature , bg ttl check by mongodb
-
+sessionSchema.index({userId:1});
 
 const SessionModel=model('Session',sessionSchema);
 

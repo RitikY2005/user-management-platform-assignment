@@ -15,6 +15,8 @@ const registerAsAdmin = async ({ name, email, password }) => {
         throw new CustomError("User already registered, please login", 429);
     }
 
+    console.log("inside the regiser service->>");
+
     // if user does not exist create one 
 
     const newUser = new UserModel({
@@ -93,7 +95,7 @@ const refreshAccessToken = async ({ user, refreshToken }) => {
     const hashedToken = hashToken(refreshToken);
 
     const session = await SessionModel.findOne({
-        refreshToken: hashed,
+        refreshToken: hashedToken,
         isRevoked: false
     });
 
@@ -103,7 +105,7 @@ const refreshAccessToken = async ({ user, refreshToken }) => {
 
     // if we find the session 
     // check if it is expired 
-    if (session.expiresAt < Date.now()) {
+    if (session.expiresAt.getTime() < Date.now()) {
         throw new CustomError("Session is expired", 401);
     }
 
@@ -114,7 +116,7 @@ const refreshAccessToken = async ({ user, refreshToken }) => {
 
     // create a new access token 
 
-    const newAcessToken = generateAccessToken(user);
+    const newAccessToken = generateAccessToken(user);
     const newRefreshToken = generateRefreshToken();
 
     // save the new refreshToken 
@@ -129,7 +131,7 @@ const refreshAccessToken = async ({ user, refreshToken }) => {
     return {
         success: true,
         message: "new access token created ",
-        newAcessToken,
+        newAccessToken,
         newRefreshToken
     }
 
@@ -139,16 +141,17 @@ const refreshAccessToken = async ({ user, refreshToken }) => {
 }
 
 const logoutUser = async (refreshToken) => {
-
+    console.log("inside auth service->");
     if (!refreshToken) {
         throw new CustomError("No refresh token", 401);
     }
 
-    await Session.updateOne(
-        { refreshTokenHash: hashToken(refreshToken) },
+    await SessionModel.updateOne(
+        { refreshToken: hashToken(refreshToken) },
         { isRevoked: true }
     );
 
+   
 
     return {
         success:true,
@@ -159,7 +162,7 @@ const logoutUser = async (refreshToken) => {
 
 
 
-export default {
+export  {
     registerAsAdmin,
     loginUser,
     refreshAccessToken,

@@ -16,8 +16,7 @@ const userSchema=Schema({
         trim:true,
         lowercase:true,
         unique:true,
-        match:['/^\S+@\S+\.\S+$/',"Email is not valid"],
-        index:true
+        match:[/^\S+@\S+\.\S+$/,"Email is not valid"],
     },
     password:{
         type:String,
@@ -56,19 +55,19 @@ const userSchema=Schema({
 
 
 // pre auto  hash passwords , refresh token 
-userSchema.pre('save',async function (next){
-    if(!this.isModified('password')) return next();
+userSchema.pre('save',async function (){
+    if(!this.isModified('password')) return;
 
     try{
 
         const salt=await bcrypt.genSalt(10);
         this.password=await bcrypt.hash(this.password,salt);
 
-        next();
+        
 
     } catch(error){
         console.log(`error in hashing passoword ->> ${error}`);
-        next(error);
+        throw error;
     }
 });
 
@@ -85,8 +84,8 @@ userSchema.statics.findActiveUsers=function (){
 }
 
 
-
-userSchema.index({email:1});
 userSchema.index({status:1});
 
 const UserModel=model('User',userSchema);
+
+export default UserModel;

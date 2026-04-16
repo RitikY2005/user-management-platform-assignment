@@ -8,7 +8,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import cors from 'cors';
 import GlobalErrorMiddleware from './src/middewares/global-error-middleware.js';
-
+import authRoutes from './src/routes/auth-routes.js';
 
 
 function startServer(){
@@ -24,8 +24,10 @@ function startServer(){
             origin:CLIENT_URL,
             credentials:true,
             methods:["GET","POST","PUT","DELETE","OPTIONS"],
-            allowedHeaders:["Content-Type","Authorizaton"]
+            allowedHeaders:["Content-Type","Authorization"]
         }));
+
+        app.use(express.json());
 
         app.use(cookieParser());
 
@@ -47,6 +49,8 @@ function startServer(){
         })
 
         // all routes here 
+
+        app.use('/api/auth',authRoutes);
 
         // run the server at PORT 
         app.listen(PORT,()=>{

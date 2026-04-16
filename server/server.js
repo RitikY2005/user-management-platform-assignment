@@ -9,6 +9,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import GlobalErrorMiddleware from './src/middewares/global-error-middleware.js';
 import authRoutes from './src/routes/auth-routes.js';
+import userRoutes from './src/routes/user-routes.js';
 
 
 function startServer(){
@@ -51,6 +52,7 @@ function startServer(){
         // all routes here 
 
         app.use('/api/auth',authRoutes);
+        app.use('/api/user',userRoutes);
 
         // run the server at PORT 
         app.listen(PORT,()=>{

@@ -22,18 +22,23 @@ export function restrictRoles(...allowedRoles) {
 }
 
 export function isAuthenticated(req, res, next) {
+    
     const authHeader = req.headers.authorization;
+
+    
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return next(new CustomError("User is not authenticated", 401));
     }
 
     const accessToken = authHeader.split(" ")[1];
+    
 
     try {
         
         const decoded = jwt.verify(accessToken, ACCESS_TOKEN_SECRET);
         req.user = decoded;
+        
         next();
 
     } catch (error) {

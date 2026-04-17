@@ -77,17 +77,20 @@ const loginUser = async ({ email, password }) => {
         expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY * 24 * 60 * 60 * 1000), // convert to milliseconds 
     });
 
+    const userObj = user.toObject();
+    delete userObj.password;
 
     return {
         success: true,
         message: "USer logged in successfully",
         refreshToken,
-        accessToken
+        accessToken,
+        user: userObj
     }
 
 }
 
-const refreshAccessToken = async ({ user, refreshToken }) => {
+const refreshAccessToken = async ({ refreshToken }) => {
     if (!refreshToken) {
         throw new CustomError("No refresh token", 500);
     }
@@ -107,6 +110,12 @@ const refreshAccessToken = async ({ user, refreshToken }) => {
     // check if it is expired 
     if (session.expiresAt.getTime() < Date.now()) {
         throw new CustomError("Session is expired", 401);
+    }
+
+    const user = await UserModel.findById(session.userId);
+
+    if (!user) {
+        throw new CustomError("User not found", 404);
     }
 
     // revoke the previous one and create a new one 
@@ -151,18 +160,18 @@ const logoutUser = async (refreshToken) => {
         { isRevoked: true }
     );
 
-   
+
 
     return {
-        success:true,
-        message:"logged user out"
+        success: true,
+        message: "logged user out"
     }
 };
 
 
 
 
-export  {
+export {
     registerAsAdmin,
     loginUser,
     refreshAccessToken,

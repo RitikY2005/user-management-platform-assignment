@@ -15,7 +15,7 @@ router.put('/me/update',isAuthenticated,validateSchema(updateMeSchema),updateMe)
 router.get(
   "/",
   isAuthenticated,
-  restrictRoles("ADMIN", "MANAGER"),
+  restrictRoles("ADMIN", "ORGANIZER"),
   validateSchema(getUsersSchema),
   getUsers
 );
@@ -24,7 +24,7 @@ router.get(
   "/:userId",
   isAuthenticated,
   validateSchema(getUserSchema),
-  restrictRoles("ADMIN", "MANAGER"),
+  restrictRoles("ADMIN", "ORGANIZER"),
   getUser
 );
 
@@ -39,7 +39,7 @@ router.post(
 router.put(
   "/:userId",
   isAuthenticated,
-  restrictRoles("ADMIN", "MANAGER"),
+  restrictRoles("ADMIN", "ORGANIZER"),
   validateSchema(updateUserSchema),
   updateUser
 );

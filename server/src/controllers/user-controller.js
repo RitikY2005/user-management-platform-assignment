@@ -4,7 +4,10 @@ import * as UserService from '../services/user-services.js';
 import CustomError from '../utils/custom-error.js';
 
 export const getMe=asyncHandler(async (req,res,next)=>{
-    const {_id:userId}=req.user;
+  
+    const userId=req.user._id;
+
+    
     
     const {message,user}=await UserService.getMe(userId);
 
@@ -16,7 +19,7 @@ export const getMe=asyncHandler(async (req,res,next)=>{
 });
 
 export const updateMe=asyncHandler(async (req,res,next)=>{
-   const {_id:userId}=req.user;
+   const userId=req.user._id;
    const data=req.validatedData.body; 
 
    const {message,user}=await UserService.updateMe(userId,data);
@@ -70,15 +73,18 @@ export const updateUser =asyncHandler( async (req, res, next) => {
     const toBeUpdated=req.validatedData.body;
     const currentUser = req.user;
 
-    // Manager restriction: cannot update admin
-    if (currentUser.role === "MANAGER") {
-      const targetUser = await UserService.getUserById(targetUserId);
-
+    // "Organizer" restriction: cannot update admin
+    if (currentUser.role === "ORGANIZER") {
+      
+      const response = await UserService.getUserById(targetUserId);
+      const targetUser=response.user;
+ console.log('hereehhew',targetUser);
       if (targetUser.role === "ADMIN") {
-        return next(new CustomError("Managers cannot update admins",403));
+       
+        return next(new CustomError("ORGANIZER cannot update admins",403));
       }
     }
-
+  
     const user = await UserService.updateUser(
       targetUserId,
       req.body,

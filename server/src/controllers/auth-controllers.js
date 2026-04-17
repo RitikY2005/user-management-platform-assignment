@@ -2,6 +2,7 @@ import { REFRESH_TOKEN_EXPIRY } from "../constants/app-constants.js";
 import { NODE_ENV } from "../constants/env-variables.js";
 import asyncHandler from "../middewares/async-handler-middleware.js";
 import * as AuthService from '../services/auth-services.js';
+import CustomError from "../utils/custom-error.js";
 
 const refreshCookieOptions={
     httpOnly:true,
@@ -26,30 +27,29 @@ export const registerAdmin=asyncHandler(async (req,res,next)=>{
 export const loginUser=asyncHandler(async (req,res,next)=>{
     const {email,password}=req.validatedData.body;
 
-    const {message,refreshToken,accessToken}=await AuthService.loginUser({email,password});
+    const {message,refreshToken,accessToken,user}=await AuthService.loginUser({email,password});
 
     res.cookie("refreshToken",refreshToken,refreshCookieOptions);
 
     res.status(200).json({
         success:true,
         message:message,
-        accessToken
+        accessToken,
+        user
     });
 
 });
 
 export const refreshAccessToken=asyncHandler(async (req,res,next)=>{
     const refreshToken=req.cookies.refreshToken;
+
     
-    const {_id,email,role}=req.user;
-    const user={
-        _id,
-        email,
-        role
-    };
 
+    if(!refreshToken) return next(new CustomError("User is not authenticated",401)); 
 
-    const {message,newAccessToken,newRefreshToken}= await AuthService.refreshAccessToken({user,refreshToken});
+    
+
+    const {message,newAccessToken,newRefreshToken}= await AuthService.refreshAccessToken({refreshToken});
 
     res.clearCookie("refreshToken",refreshCookieOptions);
 

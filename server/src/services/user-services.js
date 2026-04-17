@@ -91,7 +91,7 @@ export const getUserById = async (id) => {
 
   return {
     success:true,
-    message:message,
+    message:"user fetched",
     user
   };
 };

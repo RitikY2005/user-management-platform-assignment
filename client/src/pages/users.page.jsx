@@ -45,8 +45,8 @@ const UsersPage = () => {
         total: res.data.total,
         pages: res.data.pages,
       });
-    } catch {
-      toast.error("Failed to fetch users");
+    } catch (error){
+      toast.error(error.response?.data?.message|| "Failed to fetch users");
     } finally {
       setLoading(false);
     }
@@ -94,8 +94,9 @@ const UsersPage = () => {
       const response = await API.delete(`/api/user/${selectedId}`);
       toast.success(response.data.message);
       fetchUsers();
-    } catch {
-      toast.error("Failed to delete");
+    } catch (error){
+     
+      toast.error(error.response?.data?.message || "Failed to fetch users");
     } finally {
       setConfirmOpen(false);
     }

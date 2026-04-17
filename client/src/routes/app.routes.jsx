@@ -8,6 +8,7 @@ import ProfilePage from '../pages/profile.page';
 import UnauthorizedPage from '../pages/unauthorized.page';
 import NotFoundPage from '../pages/notfound.page';
 import RegisterPage from "../pages/register.page";
+import DashboardLayout from "../layouts/dashboard.layout";
 
 const AppRoutes = () => {
   return (
@@ -16,31 +17,16 @@ const AppRoutes = () => {
       <Route path="/register" element={<RegisterPage />} />
 
       <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <DashboardPage />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/users"
-        element={
-          <ProtectedRoute roles={["ADMIN", "ORGANIZER"]}>
-            <UsersPage />
-          </ProtectedRoute>
-        }
-      />
-
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <ProfilePage />
-          </ProtectedRoute>
-        }
-      />
+  element={
+    <ProtectedRoute>
+      <DashboardLayout />
+    </ProtectedRoute>
+  }
+>
+  <Route path="/" element={<DashboardPage />} />
+  <Route path="/users" element={<UsersPage />} />
+  <Route path="/profile" element={<ProfilePage />} />
+</Route>
 
       <Route path="/unauthorized" element={<UnauthorizedPage />} />
       <Route path="*" element={<NotFoundPage />} />

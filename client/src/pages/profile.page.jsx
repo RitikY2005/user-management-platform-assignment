@@ -42,7 +42,7 @@ function ProfilePage() {
 
   const handleUpdate = async () => {
     try {
-      await API.put(`/api/user/${user._id}`, form);
+      await API.put(`/api/user/me/update`, form);
       toast.success("Profile updated");
       fetchProfile();
     } catch (err) {

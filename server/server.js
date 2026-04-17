@@ -34,7 +34,7 @@ function startServer(){
 
         app.use(rateLimit({ // only 40 requests per hour limit per ip
             windowMs:1*60*60*1000,
-            limit:40
+            limit:100
         }));
 
         app.use(morgan("dev")); // basic request logging 
